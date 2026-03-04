@@ -872,7 +872,7 @@
 #endif
 
 #if !defined(ENABLE_BINDING_INTEGRITY) && !OS(WINDOWS)
-#define ENABLE_BINDING_INTEGRITY 1
+#define ENABLE_BINDING_INTEGRITY 0
 #endif
 
 #if !defined(ENABLE_TREE_DEBUGGING) && !defined(NDEBUG)

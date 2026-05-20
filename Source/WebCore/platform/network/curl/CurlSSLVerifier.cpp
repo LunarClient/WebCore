@@ -40,6 +40,13 @@ CurlSSLVerifier::CurlSSLVerifier(void* sslCtx)
     SSL_CTX_set_app_data(ctx, this);
     SSL_CTX_set_verify(ctx, SSL_CTX_get_verify_mode(ctx), verifyCallback);
 
+    // curl 7.88 unconditionally sets SSL_OP_NO_TICKET (legacy CVE workaround
+    // from the OpenSSL 0.9.x era). Modern TLS stacks rely on RFC 5077 tickets
+    // and TLS 1.3 NewSessionTicket for resumption — clear the flag so the
+    // session_ticket extension is offered and tickets get cached via curl's
+    // existing ossl_new_session_cb.
+    SSL_CTX_clear_options(ctx, SSL_OP_NO_TICKET);
+
 #if !defined(LIBRESSL_VERSION_NUMBER)
     const auto& sslHandle = CurlContext::singleton().sslHandle();
     if (const auto& signatureAlgorithmsList = sslHandle.signatureAlgorithmsList(); !signatureAlgorithmsList.isNull())

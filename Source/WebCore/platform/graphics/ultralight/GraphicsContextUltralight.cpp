@@ -114,7 +114,8 @@ void GraphicsContextUltralight::drawNativeImage(NativeImage& nativeImage, const 
         }
     }
 
-    bool use_nearest = options.interpolationQuality() == InterpolationQuality::DoNotInterpolate;
+    bool use_nearest = options.interpolationQuality() == InterpolationQuality::DoNotInterpolate
+        || state().imageInterpolationQuality() == InterpolationQuality::DoNotInterpolate;
     platformContext()->DrawImage(image, adjustedSrcRect, adjustedDestRect, UltralightColorWHITE, use_nearest);
     if (needs_transparency_layer)
         endTransparencyLayer();
@@ -157,7 +158,8 @@ void GraphicsContextUltralight::drawPattern(NativeImage& nativeImage, const Floa
 
     ultralight::Rect dest = destRect;
     ultralight::Rect src = tileRect;
-    bool use_nearest = options.interpolationQuality() == InterpolationQuality::DoNotInterpolate;
+    bool use_nearest = options.interpolationQuality() == InterpolationQuality::DoNotInterpolate
+        || state().imageInterpolationQuality() == InterpolationQuality::DoNotInterpolate;
     platformContext()->DrawPattern(image, src, dest, combined, use_nearest);
 
     restore();
